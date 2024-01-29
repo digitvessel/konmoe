@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自动网页刷新</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f8f8f8;
+        }
+
+        #container {
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        #urlInput, #refreshInterval {
+            margin-bottom: 20px;
+            padding: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #refreshInterval {
+            width: 60%;
+            display: inline-block;
+        }
+
+        #intervalValue {
+            display: inline-block;
+            width: 30%;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #4285f4;
+        }
+
+        #refreshButton {
+            padding: 15px;
+            background-color: #4285f4;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        #refreshButton:hover {
+            background-color: #3367d6;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>自动网页刷新</h1>
+        <label for="urlInput">网页地址：</label>
+        <input type="text" id="urlInput" placeholder="输入网页地址">
+
+        <label for="refreshInterval">刷新间隔（秒）：<span id="intervalValue">0.1</span></label>
+        <!-- 修改max属性为0.3 -->
+        <input type="range" id="refreshInterval" min="0.1" max="0.3" step="0.1" value="0.1">
+
+        <br>
+
+        <button id="refreshButton">开始刷新</button>
+    </div>
+
+    <script>
+        var refreshIntervalId;
+
+        document.getElementById('refreshInterval').addEventListener('input', function () {
+            // 更新间隔显示值
+            document.getElementById('intervalValue').innerText = this.value;
+        });
+
+        document.getElementById('refreshButton').addEventListener('click', function () {
+            var url = document.getElementById('urlInput').value;
+            var interval = parseFloat(document.getElementById('refreshInterval').value) * 1000;
+
+            // 判断间隔是否超过0.3秒
+            if (interval > 300) {
+                alert('刷新间隔不能超过0.3秒！');
+                return;
+            }
+
+            if (url.trim() !== "") {
+                refreshIntervalId = setInterval(function () {
+                    location.href = url;
+                }, interval);
+
+                document.getElementById('container').innerHTML = '<h2>网页正在自动刷新中...</h2>';
+            } else {
+                alert('请输入有效的网页地址！');
+            }
+        });
+    </script>
+</body>
+</html>
